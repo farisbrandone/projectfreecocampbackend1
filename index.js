@@ -38,6 +38,14 @@ app.get("/api/hello", function (req, res) {
     greeting: 'hello API'
   });
 });
+app.get('/api/whoami', function (req, res) {
+  const index=req.rawHeaders.indexOf("Accept-Language");
+ const index2=req.rawHeaders.indexOf('User-Agent');
+ const language=req.rawHeaders[index+1]
+ const software=req.rawHeaders[index2+1]
+ console.log(req.ip) 
+   res.json({ipaddress:req.ip, language, software}); 
+ });
  app.get("/api", function (req, res){
   console.log("bla")
   const result=handler(Date.now())
@@ -92,14 +100,7 @@ app.get("/api/:date", function (req, res) {
   } */
 });
 
-app.get('/api/whoami', function (req, res) {
-  const index=req.rawHeaders.indexOf("Accept-Language");
- const index2=req.rawHeaders.indexOf('User-Agent');
- const language=req.rawHeaders[index+1]
- const software=req.rawHeaders[index2+1]
- console.log(req.ip) 
-   res.json({ipaddress:req.ip, language, software}); 
- });
+
 
 
 // listen for requests :)
