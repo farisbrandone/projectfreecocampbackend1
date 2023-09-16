@@ -14,7 +14,7 @@ app.use(cors({
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
-
+app.set('trust proxy', true);
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
@@ -92,7 +92,14 @@ app.get("/api/:date", function (req, res) {
   } */
 });
 
-
+app.get('/api/whoami', function (req, res) {
+  const index=req.rawHeaders.indexOf("Accept-Language");
+ const index2=req.rawHeaders.indexOf('User-Agent');
+ const language=req.rawHeaders[index+1]
+ const software=req.rawHeaders[index2+1]
+ console.log(req.ip) 
+   res.json({ipaddress:req.ip, language, software}); 
+ });
 
 
 // listen for requests :)
