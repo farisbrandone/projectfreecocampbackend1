@@ -1,8 +1,6 @@
 // index.js
 // where your node app starts
 import mongoose from "mongoose";
-import { nanoid }from  "nanoid";
-import urlExist from "url-exist";
 import URL from "./models/urlModels.js";
 import dotenv from "dotenv";
 import express from "express";
@@ -10,12 +8,13 @@ import cors from "cors"
 import bodyParser from 'body-parser';
 import dns from "dns"
 import { URL as URL1} from 'node:url';
+import multer from "multer"
 
 dotenv.config();
 // init project
 var app = express();
-app.use(express.json({limit:"30mb", extended: true}));
-app.use(express.urlencoded({limit:"30mb", extended: true}));
+/* app.use(express.json({limit:"30mb", extended: true}));
+app.use(express.urlencoded({limit:"30mb", extended: true})); */
 app.use(bodyParser.urlencoded({ extended: false }));
 const port = process.env.PORT || 5000;
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
@@ -84,6 +83,20 @@ app.get('/api/whoami', function (req, res) {
   const result=handler(Date.now())
   res.json(result);
 }) 
+
+
+const upload = multer({ dest: './public/data/uploads/' })
+app.post('/api/fileanalyse', upload.single('upfile'), function (req, res) {
+   // req.file is the name of your file in the form above, here 'uploaded_file'
+   // req.body will hold the text fields, if there were any 
+   console.log(req.file, req.body)
+   res.json({
+    name:req.file.originalname,
+    type:req.file.mimetype,
+    size:req.file.size
+  })
+});
+
 
 /* app.get("/api/:date", function (req, res) {
   const params = req.params.date
